@@ -22,11 +22,9 @@ app = Flask(__name__)
 
 @app.route('/')
 
-def hello_wolrd():
-    return jsonify(names)
-
 def query1():
     cursor.execute('SELECT TOP (100) [CustomerKey], [FirstName], [MiddleName], [LastName] FROM [AdventureWorksDW2019].[dbo].[DimCustomer]')
+    
 
 
 @app.route('/last/')
