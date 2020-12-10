@@ -1,6 +1,6 @@
-# sales_app
+# Sales app
 
-A new Flutter project.
+A Flutter project made as a part of Data Warehousing and Data Mining lab assignment whereby, we are required to connect to a warehouse database and display the data from the warehouse whilst performing roll-up and drill-down operations. The DB connection is done via a python script that exposes the individual warehouse operations via Flask API. The Flutter UI consumes the API to render GUI element.
 
 ## Getting Started
 
