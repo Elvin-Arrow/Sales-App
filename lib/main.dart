@@ -1,9 +1,14 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sales_app/models/button_state.dart';
 import 'package:sales_app/models/model.dart';
 import 'package:sales_app/providers/button_provider.dart';
+import 'package:sales_app/providers/region_provider.dart';
+import 'package:sales_app/widgets/constraint_dropdown.dart';
+import 'package:sales_app/widgets/primary_button.dart';
+import 'package:sales_app/models/regional_sales.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(MyApp());
@@ -16,6 +21,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ButtonProvider()),
+        ChangeNotifierProvider(create: (_) => RegionProvider()),
       ],
       child: MaterialApp(
         home: HomePage(),
@@ -161,62 +167,106 @@ class HomePage extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          ConstraintDropdown(
-            items: ['United States'],
-            hintText: 'Country',
+          Consumer<RegionProvider>(
+            builder: (_, regionProvider, child) {
+              return ConstraintDropdown(
+                value: regionProvider.region?.country,
+                items: ['United States'],
+                hintText: 'Country',
+                onChanged: (value) {
+                  Provider.of<RegionProvider>(context, listen: false)
+                      .setCountry(value);
+                },
+              );
+            },
           ),
-          ConstraintDropdown(
-            items: [
-              'ABINGTON',
-              'ACCORD',
-              'ACTON',
-              'ACUSHNET',
-              'ADAMS',
-              'AGAWAM',
-              'ALLSTON',
-              'AMESBURY',
-              'AMHERST',
-              'AMHERST',
-              'AMHERST',
-              'ANDOVER',
-              'ARLINGTON',
-              'ARLINGTON HEIGHTS',
-              'ASHBURNHAM',
-              'ASHBY',
-              'ASHFIELD',
-              'ASHLAND',
-              'ASHLEY FALLS',
-              'ASSONET',
-              'ATHOL',
-              'ATTLEBORO',
-              'ATTLEBORO FALLS',
-              'AUBURN',
-              'AUBURNDALE',
-              'AVON',
-              'AYER',
-              'BABSON PARK',
-              'BALDWINVILLE',
-              'BARNSTABLE',
-              'BARRE',
-              'BECKET',
-              'BEDFORD',
-              'BELCHERTOWN',
-              'BELLINGHAM',
-              'BELMONT',
-              'BERKLEY',
-              'BERKSHIRE',
-              'BERLIN',
-              'BERNARDSTON',
-              'BEVERLY',
-              'BILLERICA',
-              'BLACKSTONE',
-              'BLANDFORD',
-            ],
-            hintText: 'City',
+          FutureBuilder(
+            future: _getCities(),
+            builder: (context, snapshot) {
+              final List<String> cities = [];
+              if (snapshot.hasData) {
+                print('Got data');
+                print(snapshot.data);
+                cities.addAll(snapshot.data);
+              }
+              return Consumer<RegionProvider>(
+                builder: (_, regionProvider, child) {
+                  return ConstraintDropdown(
+                    value: regionProvider.region.city,
+                    items: cities,
+                    hintText: 'City',
+                    onChanged: (val) {
+                      Provider.of<RegionProvider>(context, listen: false)
+                          .setCity(val);
+                    },
+                  );
+                },
+              );
+            },
           ),
-          ConstraintDropdown(
-            items: ['Zip code'],
-            hintText: 'Zip code',
+          Consumer<RegionProvider>(
+            builder: (_, regionProvider, child) {
+              return ConstraintDropdown(
+                value: regionProvider.region.zip,
+                items: [
+                  '2351',
+                  '2018',
+                  '1720',
+                  '2743',
+                  '1220',
+                  '1001',
+                  '2134',
+                  '1913',
+                  '1002',
+                  '1003',
+                  '1004',
+                  '1810',
+                  '1812',
+                  '1899',
+                  '5501',
+                  '5544',
+                  '2474',
+                  '2476',
+                  '2475',
+                  '1430',
+                  '1431',
+                  '1330',
+                  '1721',
+                  '1222',
+                  '2702',
+                  '1331',
+                  '2703',
+                  '2763',
+                  '1501',
+                  '2466',
+                  '2322',
+                  '1432',
+                  '2457',
+                  '1436',
+                  '2630',
+                  '1005',
+                  '1223',
+                  '1730',
+                  '1007',
+                  '2019',
+                  '2478',
+                  '2779',
+                  '1224',
+                  '1503',
+                  '1337',
+                  '1915',
+                  '1821',
+                  '1822',
+                  '1504',
+                  '1008',
+                ],
+                hintText: 'Zip code',
+                onChanged: (val) {
+                  Provider.of<RegionProvider>(context, listen: false)
+                      .setState(val);
+                },
+              );
+            },
           ),
         ],
       ),
@@ -227,7 +277,15 @@ class HomePage extends StatelessWidget {
       Align(
         alignment: Alignment.center,
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () async {
+            final http.Response rawJson = await http.get(
+              'http://localhost:5000/',
+            );
+            final parsedJson = jsonDecode(rawJson.body);
+            // print(parsedJson);
+            Provider.of<RegionProvider>(context, listen: false)
+                .addSale(parsedJson);
+          },
           child: Text('Lookup'),
           style: ButtonStyle(
             padding: MaterialStateProperty.all(
@@ -249,50 +307,63 @@ class HomePage extends StatelessWidget {
       _getChart(),
 
       // Table
-      DataTable(
-        columns: [
-          DataColumn(
-            label: Text('Country'),
+      Expanded(
+        child: SingleChildScrollView(
+          child: Consumer<RegionProvider>(
+            builder: (_, regionProvider, child) {
+              List<DataRow> tableContents = [];
+
+              for (RegionalSale sales in regionProvider.regionalSales) {
+                tableContents.add(
+                  DataRow(
+                    cells: [
+                      DataCell(
+                        Text('${sales.totalSales}'),
+                      ),
+                      DataCell(
+                        Text('${sales.country}'),
+                      ),
+                      DataCell(
+                        Text('${sales.city}'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return DataTable(
+                columns: [
+                  DataColumn(
+                    label: Text('Total Sales'),
+                  ),
+                  DataColumn(
+                    label: Text('Year'),
+                  ),
+                  DataColumn(
+                    label: Text('Quarter'),
+                  ),
+                ],
+                rows: tableContents,
+              );
+            },
           ),
-          DataColumn(
-            label: Text('City'),
-          ),
-          DataColumn(
-            label: Text('Zip'),
-          ),
-        ],
-        rows: [
-          DataRow(
-            cells: [
-              DataCell(
-                Text('United States'),
-              ),
-              DataCell(
-                Text('BEDFORD'),
-              ),
-              DataCell(
-                Text('123456'),
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     ];
   }
 
   Widget _getChart() {
     var data = [
-      ModelClass('2016', 12, Colors.red),
-      ModelClass('2017', 42, Colors.yellow),
-      ModelClass('2018', 52, Colors.green),
+      ModelClass(69, '1998', 3, Colors.red),
+      ModelClass(115, '1999', 3, Colors.yellow),
+      ModelClass(161, '2000', 52, Colors.green),
     ];
 
     var series = [
       charts.Series(
         domainFn: (ModelClass clickData, _) => clickData.year,
-        measureFn: (ModelClass clickData, _) => clickData.clicks,
+        measureFn: (ModelClass clickData, _) => clickData.totalSales,
         colorFn: (ModelClass clickData, _) => clickData.color,
-        id: 'Clicks',
+        id: 'Total sales',
         data: data,
       ),
     ];
@@ -310,100 +381,18 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-}
 
-class ConstraintDropdown extends StatefulWidget {
-  final List<String> items;
-  final String hintText;
+  Future<List<String>> _getCities() async {
+    print('Attempting to get cities');
+    List<String> cities = [];
+    final rawJson = await http.get('http://127.0.0.1:5000/cities');
+    final parsedJson = jsonDecode(rawJson.body);
 
-  const ConstraintDropdown({
-    Key key,
-    @required this.items,
-    this.hintText,
-  }) : super(key: key);
+    for (final city in parsedJson) {
+      cities.add(city['city']);
+    }
 
-  @override
-  _ConstraintDropdownState createState() => _ConstraintDropdownState();
-}
-
-class _ConstraintDropdownState extends State<ConstraintDropdown> {
-  String selectedItem;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      elevation: 2.0,
-      borderRadius: BorderRadius.circular(12.0),
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 34.0,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: DropdownButton(
-          value: selectedItem,
-          hint: Text(widget.hintText),
-          items: widget.items.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          elevation: 12,
-          onChanged: (value) {
-            setState(() {
-              selectedItem = value;
-            });
-          },
-          icon: Icon(Icons.arrow_downward),
-        ),
-      ),
-    );
-  }
-}
-
-class PrimaryButton extends StatelessWidget {
-  PrimaryButton({
-    @required this.key,
-    @required this.onPressed,
-    this.text,
-    this.buttonState,
-    this.borderRadius,
-    this.padding,
-    this.internalPadding,
-  });
-
-  final Key key;
-  final VoidCallback onPressed;
-  final String text;
-  final ButtonState buttonState;
-  final BorderRadius borderRadius;
-  final EdgeInsets internalPadding;
-  final EdgeInsets padding;
-
-  ButtonState get state => buttonState;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: this.padding,
-      child: RawMaterialButton(
-        onPressed: this.onPressed,
-        shape: RoundedRectangleBorder(
-          borderRadius: this.borderRadius ?? BorderRadius.circular(20.0),
-        ),
-        child: Padding(
-          padding: this.internalPadding ?? EdgeInsets.all(8.0),
-          child: Text(
-            this.text ?? '',
-            style: TextStyle(
-              fontSize: 16.0,
-              color: buttonState.textColour,
-            ),
-          ),
-        ),
-      ),
-    );
+    print('Returning');
+    return cities;
   }
 }
