@@ -52,12 +52,12 @@ def query1():
     
 
 
-@app.route("/cities")
-def cities():
+@app.route("/yearly")
+def yearlySales():
 
     temp = []
     select = 'SELECT [city] '
-    dfrom = 'FROM [Test].[dbo].[locationDimension]'
+    dfrom = 'FROM [Test].[dbo].[sales_fact] JOIN [Test].[dbo].[time] ON '
 
     query = select + dfrom
 
