@@ -6,6 +6,7 @@ class PrimaryButton extends StatelessWidget {
     @required this.key,
     @required this.onPressed,
     this.text,
+    this.textColour,
     this.buttonState,
     this.borderRadius,
     this.padding,
@@ -15,6 +16,7 @@ class PrimaryButton extends StatelessWidget {
   final Key key;
   final VoidCallback onPressed;
   final String text;
+  final Color textColour;
   final ButtonState buttonState;
   final BorderRadius borderRadius;
   final EdgeInsets internalPadding;
@@ -37,7 +39,7 @@ class PrimaryButton extends StatelessWidget {
             this.text ?? '',
             style: TextStyle(
               fontSize: 16.0,
-              color: buttonState.textColour,
+              color: this.textColour,
             ),
           ),
         ),

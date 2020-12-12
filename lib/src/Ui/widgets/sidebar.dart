@@ -1,81 +1,99 @@
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sales_app/providers/button_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sales_app/src/Ui/widgets/dashboard.dart';
+import 'package:sales_app/src/Ui/widgets/operations.dart';
+import 'package:sales_app/src/cubit/page_cubit.dart';
+import 'package:sales_app/src/utilities/constants.dart';
 import 'package:sales_app/widgets/primary_button.dart';
 
 class Sidebar extends StatelessWidget {
   final double width;
+  final View view;
 
-  const Sidebar({Key key, @required this.width}) : super(key: key);
+  const Sidebar({
+    Key key,
+    @required this.width,
+    @required this.view,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF250C4F),
-              Color(0xFF1D1943),
-            ],
-          ),
-          borderRadius: BorderRadius.circular(12.0),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF250C4F),
+            Color(0xFF1D1943),
+          ],
         ),
-        width: this.width,
-        child: Column(
-          children: _getSidebarItems(context),
-        ),
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      width: this.width,
+      height: MediaQuery.of(context).size.width,
+      child: Column(
+        children: _getSidebarItems(context),
       ),
     );
   }
 
   List<Widget> _getSidebarItems(BuildContext context) {
     return [
-      CircularProfileAvatar('assets/images/logo.png'),
+      SizedBox(
+        height: 24.0,
+      ),
+      CircularProfileAvatar('assets/images/logo.jpeg'),
+      SizedBox(
+        height: 24.0,
+      ),
       Text(
-        'The leggars',
+        'Q Next',
         style: TextStyle(
           fontSize: 24.0,
           color: Colors.white,
         ),
       ),
       Spacer(),
-      Consumer<ButtonProvider>(
-        builder: (_, buttonProvider, child) {
-          final key = Key('dashboard_btn');
+      BlocBuilder<PageCubit, PageState>(
+        builder: (_, state) {
+          Color buttonTextColour;
+          if (state is ShowDashboard || state is PageInitial) {
+            buttonTextColour = Colors.tealAccent;
+          } else {
+            buttonTextColour = Colors.white;
+          }
           return PrimaryButton(
-            key: key,
+            key: null,
             onPressed: () {
-              Provider.of<ButtonProvider>(context, listen: false)
-                  .toggleButtonState(key);
+              final pageCubit = context.read<PageCubit>();
+              pageCubit.showDashboard();
             },
-            buttonState: buttonProvider.getButtonState(
-              key,
-              selected: true,
-            ),
             text: 'Dashboard',
+            textColour: buttonTextColour,
           );
         },
       ),
       SizedBox(
         height: 24.0,
       ),
-      Consumer<ButtonProvider>(
-        builder: (_, buttonProvider, child) {
-          final key = Key('detailed_sales_btn');
+      BlocBuilder<PageCubit, PageState>(
+        builder: (_, state) {
+          Color buttonTextColour;
+          if (state is ShowOperations) {
+            buttonTextColour = Colors.tealAccent;
+          } else {
+            buttonTextColour = Colors.white;
+          }
           return PrimaryButton(
-            key: key,
+            key: null,
             onPressed: () {
-              Provider.of<ButtonProvider>(context, listen: false)
-                  .toggleButtonState(key);
+              final pageCubit = context.read<PageCubit>();
+              pageCubit.showOperations();
             },
-            buttonState: buttonProvider.getButtonState(
-              key,
-            ),
             text: 'Sales Details',
+            textColour: buttonTextColour,
           );
         },
       ),

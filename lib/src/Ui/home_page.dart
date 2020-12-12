@@ -4,6 +4,7 @@ import 'package:sales_app/src/Ui/widgets/dashboard.dart';
 import 'package:sales_app/src/Ui/widgets/operations.dart';
 import 'package:sales_app/src/Ui/widgets/sidebar.dart';
 import 'package:sales_app/src/cubit/page_cubit.dart';
+import 'package:sales_app/src/utilities/constants.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -23,29 +24,26 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _getContent(BuildContext context) {
-    return BlocBuilder<PageCubit, PageState>(
-      builder: (context, state) {
-        if (state is PageLoading) {
-          // TODO show loading page
-        } else if (state is ShowOperations) {
-          return _renderPage(context, Operations());
-        }
-
-        return _renderPage(context, Dashboard());
-      },
-    );
-  }
-
-  Widget _renderPage(BuildContext context, Widget content) {
     return Row(
       children: [
         // Side bar
         Sidebar(
           width: MediaQuery.of(context).size.width * 0.20,
+          view: View.Dashboard,
         ),
 
         // Body
-        content,
+        BlocBuilder<PageCubit, PageState>(
+          builder: (_, state) {
+            if (state is PageLoading) {
+              // TODO show loading page
+            } else if (state is ShowOperations) {
+              return Operations();
+            }
+
+            return Dashboard();
+          },
+        )
       ],
     );
   }
