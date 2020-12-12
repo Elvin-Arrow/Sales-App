@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sales_app/src/Ui/loading_page.dart';
 import 'package:sales_app/src/Ui/widgets/dashboard.dart';
 import 'package:sales_app/src/Ui/widgets/operations.dart';
 import 'package:sales_app/src/Ui/widgets/sidebar.dart';
@@ -35,13 +36,14 @@ class HomePage extends StatelessWidget {
         // Body
         BlocBuilder<PageCubit, PageState>(
           builder: (_, state) {
-            if (state is PageLoading) {
-              // TODO show loading page
+            if (state is ShowDashboard) {
+              return Dashboard(yearlySales: state.yearlySales,);
             } else if (state is ShowOperations) {
               return Operations();
             }
 
-            return Dashboard();
+            context.read<PageCubit>().showDashboard();
+            return Expanded(child: LoadingPage());
           },
         )
       ],

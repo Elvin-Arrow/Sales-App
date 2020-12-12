@@ -52,19 +52,19 @@ def query1():
     
 
 
-@app.route("/yearly")
+@app.route("/yearly/")
 def yearlySales():
 
     temp = []
-    select = 'SELECT [city] '
-    dfrom = 'FROM [Test].[dbo].[sales_fact] JOIN [Test].[dbo].[time] ON '
-
-    query = select + dfrom
+    select = 'SELECT year, sum(dollars_sold) as sales '
+    dfrom = 'FROM Test.dbo.saleFact JOIN Test.dbo.timeDimension ON saleFact.time_key = timeDimension.time_key '
+    group = 'GROUP BY year'
+    query = select + dfrom + group
 
     cursor.execute(query)
 
     for row in cursor:
-        temp.append({"city": row.city})
+        temp.append({"year": int(row.year), "sales": row.sales})
 
     response = jsonify(temp)
 
