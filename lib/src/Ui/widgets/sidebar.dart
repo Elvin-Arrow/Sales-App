@@ -5,7 +5,7 @@ import 'package:sales_app/src/Ui/widgets/dashboard.dart';
 import 'package:sales_app/src/Ui/widgets/operations.dart';
 import 'package:sales_app/src/cubit/page_cubit.dart';
 import 'package:sales_app/src/utilities/constants.dart';
-import 'package:sales_app/widgets/primary_button.dart';
+import 'package:sales_app/src/Ui/widgets/primary_button.dart';
 
 class Sidebar extends StatelessWidget {
   final double width;

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sales_app/models/button_state.dart';
 
 class PrimaryButton extends StatelessWidget {
   PrimaryButton({
@@ -7,7 +6,6 @@ class PrimaryButton extends StatelessWidget {
     @required this.onPressed,
     this.text,
     this.textColour,
-    this.buttonState,
     this.borderRadius,
     this.padding,
     this.internalPadding,
@@ -17,12 +15,10 @@ class PrimaryButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
   final Color textColour;
-  final ButtonState buttonState;
+
   final BorderRadius borderRadius;
   final EdgeInsets internalPadding;
   final EdgeInsets padding;
-
-  ButtonState get state => buttonState;
 
   @override
   Widget build(BuildContext context) {
