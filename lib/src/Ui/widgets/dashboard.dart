@@ -58,29 +58,33 @@ class Dashboard extends StatelessWidget {
   }
 
   Widget _getBarCharts(BuildContext context) {
-    final double heightConstraint = MediaQuery.of(context).size.height * 0.4;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+    final double heightConstraint = MediaQuery.of(context).size.height * 0.375;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Row(
+        MaterialBarChart(
+          title: 'Yearly Sales',
+          height: heightConstraint * 2 + 24,
+          width: MediaQuery.of(context).size.width * 0.4,
+          barColour: Colors.teal,
+        ),
+        Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             MaterialBarChart(
+              title: 'Regional Sales',
               height: heightConstraint,
+              barColour: Colors.greenAccent,
+            ),
+            SizedBox(
+              height: 24.0,
             ),
             MaterialBarChart(
+              title: 'Brand Sales',
               height: heightConstraint,
+              barColour: Colors.redAccent,
             ),
           ],
-        ),
-        SizedBox(
-          height: 24.0,
-        ),
-        Center(
-          child: MaterialBarChart(
-            height: 500.0,
-            barColour: Colors.teal,
-          ),
         ),
       ],
     );
