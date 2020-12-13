@@ -9,7 +9,7 @@ class ConstraintDropdown extends StatelessWidget {
   const ConstraintDropdown(
       {Key key,
       @required this.items,
-      this.hintText,
+      this.hintText = '',
       this.value,
       @required this.onChanged})
       : super(key: key);
@@ -21,7 +21,7 @@ class ConstraintDropdown extends StatelessWidget {
       borderRadius: BorderRadius.circular(12.0),
       child: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: 34.0,
+          horizontal: 12.0,
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12.0),
@@ -29,10 +29,10 @@ class ConstraintDropdown extends StatelessWidget {
         child: DropdownButton(
           value: this.value,
           hint: Text(hintText),
-          items: items.map<DropdownMenuItem<String>>((String value) {
+          items: items.map<DropdownMenuItem<String>>((String val) {
             return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
+              value: val,
+              child: Text(val),
             );
           }).toList(),
           elevation: 12,

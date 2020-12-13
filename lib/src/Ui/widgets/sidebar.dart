@@ -15,22 +15,28 @@ class Sidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF250C4F),
-            Color(0xFF1D1943),
-          ],
+    return Material(
+      elevation: 4.0,
+      borderRadius: BorderRadius.circular(12.0),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              // Color(0xFF250C4F),
+              Colors.blueAccent,
+              Colors.purpleAccent,
+              // Color(0xFF1D1943),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(12.0),
         ),
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      width: this.width,
-      height: MediaQuery.of(context).size.width,
-      child: Column(
-        children: _getSidebarItems(context),
+        width: this.width,
+        height: MediaQuery.of(context).size.width,
+        child: Column(
+          children: _getSidebarItems(context),
+        ),
       ),
     );
   }

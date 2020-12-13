@@ -7,3 +7,9 @@ enum Sale {
   ItemBrand,
   ItemType,
 }
+
+enum QueryControls {
+  Time,
+  Location,
+  Item,
+}
