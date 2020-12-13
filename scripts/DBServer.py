@@ -2,8 +2,8 @@ import pyodbc
 from flask import Flask, jsonify
 
 conn = pyodbc.connect('Driver={SQL Server};'
-                      'Server=DESKTOP-P75CUH1\SQLEXPRESS;'
-                      'Database=AdventureWorksDW2019;'
+                      'Server=DESKTOP-RRKDPDK\SQLEXPRESS;'
+                      'Database=SaleManagement;'
                       'Trusted_Connection=yes;')
 
 
@@ -31,7 +31,7 @@ cursor = conn.cursor()
 app = Flask(__name__)
 
 @app.route('/')
-def query1():
+def query():
     temp = []
     select = 'SELECT sum([dollars_sold]) as totalSales, [country], [city] '
     dfrom = 'FROM [Test].[dbo].[saleFact] JOIN [Test].[dbo].[locationDimension] ON [Test].[dbo].[saleFact].[location_key] = [Test].[dbo].[locationDimension].[location_key] '
@@ -84,7 +84,7 @@ def query1():
     cursor.execute(query)
 
     for row in cursor:
-        temp.append({"year": int(row.year), "sales": row.sales})
+        temp.append({"year": int(row.year), "quarter":int(row.quarter),"sales": row.sales})
 
     response = jsonify(temp)
 
@@ -103,7 +103,7 @@ def query2():
     cursor.execute(query)
 
     for row in cursor:
-        temp.append({"year": int(row.year), "sales": row.sales})
+        temp.append({"country": int(row.country), "city":String(row.city),"sales": row.sales})
 
     response = jsonify(temp)
 
@@ -114,7 +114,7 @@ def query2():
 @app.route("/query3/")
 def query3():
     temp = []
-    select = 'SELECT brand, item.type, sum(dollars_sold) sales '
+    select = 'SELECT brand, item.type as itemType, sum(dollars_sold) sales '
     dfrom = 'FROM saleFact JOIN item ON saleFact.item_key = item.item_key '
     group = 'GROUP BY brand, item.type'
     query = select + dfrom + group
@@ -122,7 +122,7 @@ def query3():
     cursor.execute(query)
 
     for row in cursor:
-        temp.append({"year": int(row.year), "sales": row.sales})
+        temp.append({"brand": int(row.brand),"type"String(row.itemType) ,"sales": row.sales})
 
     response = jsonify(temp)
 
@@ -141,7 +141,7 @@ def query4():
     cursor.execute(query)
 
     for row in cursor:
-        temp.append({"year": int(row.year), "sales": row.sales})
+        temp.append({"month": int(row.month),"day" : String(row.day), "sales": row.sales})
 
     response = jsonify(temp)
 
@@ -152,7 +152,7 @@ def query4():
 @app.route("/query5/")
 def query5():
     temp = []
-    select = 'SELECT item_name as itemName, sum(units_sold) Quantity, sum(dollars_sold) sales '
+    select = 'SELECT item_name as itemName, sum(units_sold) quantity, sum(dollars_sold) sales '
     dfrom = 'FROM saleFact JOIN item ON saleFact.item_key = item.item_key '
     group = 'GROUP BY item_name'
     query = select + dfrom + group
@@ -160,7 +160,7 @@ def query5():
     cursor.execute(query)
 
     for row in cursor:
-        temp.append({"year": int(row.year), "sales": row.sales})
+        temp.append({"itemName": String(row.itemName), "quantity":int(row.quantity) ,"sales": row.sales})
 
     response = jsonify(temp)
 
@@ -179,7 +179,7 @@ def query6():
     cursor.execute(query)
 
     for row in cursor:
-        temp.append({"year": int(row.year), "sales": row.sales})
+        temp.append({"street": String(row.street), "sales": row.sales})
 
     response = jsonify(temp)
 
