@@ -31,16 +31,17 @@ class Operations extends StatelessWidget {
           ),
           BlocBuilder<ControlCubit, ControlState>(
             builder: (_, state) {
-              List<Widget> controls;
               if (state is TimeControl) {
+                return _getControl(QueryControls.Time, state.controlParameter);
               } else if (state is LocationControl) {
-              } else if (state is ItemControl) {}
+                return _getControl(
+                    QueryControls.Location, state.controlParameter);
+              } else if (state is ItemControl) {
+                return _getControl(QueryControls.Item, state.controlParameter);
+              }
 
-              return controls != null
-                  ? Row(
-                      children: controls,
-                    )
-                  : Container();
+              // Show no control by default
+              return Container();
             },
           ),
         ],
@@ -57,33 +58,48 @@ class Operations extends StatelessWidget {
       return QueryControls.Item;
   }
 
-  Widget _getControl() {
-    return ListTile(
-      leading: Text('Sort by: '),
-      title: ConstraintDropdown(
-        items: [],
-        onChanged: (val) {},
-      ),
+  Widget _getControl(QueryControls queryControl, String controlParameter) {
+    List<String> items;
+
+    switch (queryControl) {
+      case QueryControls.Time:
+        items = _getTimeValues();
+        break;
+
+      case QueryControls.Location:
+        items = _getLocationValues();
+        break;
+
+      case QueryControls.Item:
+        items = _getItemValues();
+        break;
+      default:
+    }
+    return Row(
+      children: [
+        Text('Sort by: '),
+        SizedBox(
+          width: 24.0,
+        ),
+        ConstraintDropdown(
+          items: items,
+          onChanged: (val) {
+            // TODO Update dropdown value and show content
+          },
+        ),
+      ],
     );
   }
 
   List<String> _getTimeValues() {
-    return [
-      'Year',
-      'Month',
-      'Quarter',
-      'Day',
-    ];
+    return ['Year', 'Month', 'Quarter', 'Day'];
   }
 
   List<String> _getLocationValues() {
-    return [
-      'Country',
-      'State / Province',
-      'City',
-      'Street',
-    ];
+    return ['Country', 'State / Province', 'City', 'Street'];
   }
 
-  List<String> _getItemValues() {}
+  List<String> _getItemValues() {
+    return ['Brand', 'Type', 'Item Name'];
+  }
 }

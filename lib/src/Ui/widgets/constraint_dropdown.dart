@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 
-class ConstraintDropdown extends StatelessWidget {
+class ConstraintDropdown extends StatefulWidget {
   final List<String> items;
   final String hintText;
-  final String value;
+
   final Function onChanged;
 
   const ConstraintDropdown(
       {Key key,
       @required this.items,
       this.hintText = '',
-      this.value,
       @required this.onChanged})
       : super(key: key);
+
+  @override
+  _ConstraintDropdownState createState() => _ConstraintDropdownState();
+}
+
+class _ConstraintDropdownState extends State<ConstraintDropdown> {
+  String selectedVal;
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +33,21 @@ class ConstraintDropdown extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: DropdownButton(
-          value: this.value,
-          hint: Text(hintText),
-          items: items.map<DropdownMenuItem<String>>((String val) {
+          hint: Text(widget.hintText),
+          items: widget.items.map<DropdownMenuItem<String>>((String val) {
             return DropdownMenuItem<String>(
               value: val,
               child: Text(val),
             );
           }).toList(),
+          value: selectedVal,
           elevation: 12,
-          onChanged: this.onChanged,
-          icon: Icon(Icons.arrow_downward),
+          onChanged: (val) {
+            setState(() {
+              this.selectedVal = val;
+            });
+            this.widget.onChanged(val);
+          },
         ),
       ),
     );

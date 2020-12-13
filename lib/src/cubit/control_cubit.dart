@@ -7,17 +7,23 @@ part 'control_state.dart';
 class ControlCubit extends Cubit<ControlState> {
   ControlCubit() : super(ControlInitial());
 
+  String controlParameter;
+  String dimensionParameter;
+
   void showControls(QueryControls controls) {
     switch (controls) {
       case QueryControls.Time:
+        controlParameter = 'Time';
         _showTimeControls();
         break;
 
       case QueryControls.Location:
+        controlParameter = 'Location';
         _showLocationControls();
         break;
 
       case QueryControls.Item:
+        controlParameter = 'Item';
         _showItemControls();
         break;
       default:
@@ -25,14 +31,14 @@ class ControlCubit extends Cubit<ControlState> {
   }
 
   void _showTimeControls() {
-    emit(TimeControl());
+    emit(TimeControl(controlParameter));
   }
 
   void _showLocationControls() {
-    emit(LocationControl());
+    emit(LocationControl(controlParameter));
   }
 
   void _showItemControls() {
-    emit(ItemControl());
+    emit(ItemControl(controlParameter));
   }
 }

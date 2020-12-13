@@ -5,8 +5,20 @@ abstract class ControlState {}
 
 class ControlInitial extends ControlState {}
 
-class TimeControl extends ControlState {}
+class TimeControl extends ControlState {
+  final String controlParameter;
 
-class LocationControl extends ControlState {}
+  TimeControl(this.controlParameter);
+}
 
-class ItemControl extends ControlState {}
+class LocationControl extends ControlState {
+  final String controlParameter;
+
+  LocationControl(this.controlParameter);
+}
+
+class ItemControl extends ControlState {
+  final String controlParameter;
+
+  ItemControl(this.controlParameter);
+}
