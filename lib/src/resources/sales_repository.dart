@@ -1,25 +1,26 @@
+// ignore: unused_import
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:sales_app/src/resources/models/sales.dart';
+// ignore: unused_import
 import 'package:http/http.dart' as http;
 import 'package:sales_app/src/resources/models/yearl_sales.dart';
 
 class SalesRepository {
   Future<List<YearlySales>> getYearlySales() async {
-    final rawJson = await http.get('http://127.0.0.1:5000/yearly/');
+    List<YearlySales> sales = [];
+    // TODO Enable data fetch after testing
+    /* final rawJson = await http.get('http://127.0.0.1:5000/yearly/');
     final parsedJson = jsonDecode(rawJson.body);
 
-    List<YearlySales> sales = [];
+    
     for (final sale in parsedJson) {
       sales.add(YearlySales.fromMap(sale));
-    }
+    } */
 
     await Future.delayed(Duration(seconds: 1));
-    return sales;
+    return sales ?? [];
   }
 
-  Sales getQuarterlySales() {}
+  /* Sales getQuarterlySales() {}
 
   Sales getMonthylSales() {}
 
@@ -35,5 +36,5 @@ class SalesRepository {
 
   Sales getSalesByItemType() {}
 
-  Sales getSalesByItem() {}
+  Sales getSalesByItem() {} */
 }

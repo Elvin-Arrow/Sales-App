@@ -1,20 +1,16 @@
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sales_app/src/Ui/widgets/dashboard.dart';
-import 'package:sales_app/src/Ui/widgets/operations.dart';
 import 'package:sales_app/src/cubit/page_cubit.dart';
-import 'package:sales_app/src/utilities/constants.dart';
+
 import 'package:sales_app/src/Ui/widgets/primary_button.dart';
 
 class Sidebar extends StatelessWidget {
   final double width;
-  final View view;
 
   const Sidebar({
     Key key,
     @required this.width,
-    @required this.view,
   }) : super(key: key);
 
   @override
