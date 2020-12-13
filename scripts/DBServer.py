@@ -73,6 +73,120 @@ def yearlySales():
     return response
 
 
+@app.route("/query1/")
+def query1():
+    temp = []
+    select = 'SELECT year, quarter, sum(dollars_sold) sales '
+    dfrom = 'FROM saleFact JOIN timeDimension ON saleFact.time_key = timeDimension.time_key '
+    group = 'GROUP BY quarter, year'
+    query = select + dfrom + group
+
+    cursor.execute(query)
+
+    for row in cursor:
+        temp.append({"year": int(row.year), "sales": row.sales})
+
+    response = jsonify(temp)
+
+    # Enable Access-Control-Allow-Origin
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+@app.route("/query2/")
+def query2():
+    temp = []
+    select = 'SELECT country, city, sum(dollars_sold) sales '
+    dfrom = 'FROM saleFact JOIN locationDimension ON saleFact.location_key = locationDimension.location_key '
+    group = 'GROUP BY city, country'
+    query = select + dfrom + group
+
+    cursor.execute(query)
+
+    for row in cursor:
+        temp.append({"year": int(row.year), "sales": row.sales})
+
+    response = jsonify(temp)
+
+    # Enable Access-Control-Allow-Origin
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+@app.route("/query3/")
+def query3():
+    temp = []
+    select = 'SELECT brand, item.type, sum(dollars_sold) sales '
+    dfrom = 'FROM saleFact JOIN item ON saleFact.item_key = item.item_key '
+    group = 'GROUP BY brand, item.type'
+    query = select + dfrom + group
+
+    cursor.execute(query)
+
+    for row in cursor:
+        temp.append({"year": int(row.year), "sales": row.sales})
+
+    response = jsonify(temp)
+
+    # Enable Access-Control-Allow-Origin
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+@app.route("/query4/")
+def query4():
+    temp = []
+    select = 'SELECT month, day, sum(dollars_sold) sales '
+    dfrom = 'FROM saleFact JOIN timeDimension ON saleFact.time_key = timeDimension.time_key '
+    group = 'GROUP BY day, month'
+    query = select + dfrom + group
+
+    cursor.execute(query)
+
+    for row in cursor:
+        temp.append({"year": int(row.year), "sales": row.sales})
+
+    response = jsonify(temp)
+
+    # Enable Access-Control-Allow-Origin
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+@app.route("/query5/")
+def query5():
+    temp = []
+    select = 'SELECT item_name as itemName, sum(units_sold) Quantity, sum(dollars_sold) sales '
+    dfrom = 'FROM saleFact JOIN item ON saleFact.item_key = item.item_key '
+    group = 'GROUP BY item_name'
+    query = select + dfrom + group
+
+    cursor.execute(query)
+
+    for row in cursor:
+        temp.append({"year": int(row.year), "sales": row.sales})
+
+    response = jsonify(temp)
+
+    # Enable Access-Control-Allow-Origin
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+@app.route("/query6/")
+def query6():
+    temp = []
+    select = 'SELECT street, sum(dollars_sold) sales '
+    dfrom = 'FROM saleFact JOIN locationDimension ON saleFact.location_key = locationDimension.location_key '
+    group = 'GROUP BY street'
+    query = select + dfrom + group
+
+    cursor.execute(query)
+
+    for row in cursor:
+        temp.append({"year": int(row.year), "sales": row.sales})
+
+    response = jsonify(temp)
+
+    # Enable Access-Control-Allow-Origin
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
 if __name__ == '__main__':
    app.run()
 
