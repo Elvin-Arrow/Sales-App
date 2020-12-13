@@ -24,10 +24,8 @@ class Sidebar extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              // Color(0xFF250C4F),
-              Colors.blueAccent,
-              Colors.purpleAccent,
-              // Color(0xFF1D1943),
+              Colors.blueGrey,
+              Color(0xFF545A72),
             ],
           ),
           borderRadius: BorderRadius.circular(12.0),
@@ -57,7 +55,9 @@ class Sidebar extends StatelessWidget {
           color: Colors.white,
         ),
       ),
-      Spacer(),
+      SizedBox(
+        height: 48.0,
+      ),
       BlocBuilder<PageCubit, PageState>(
         builder: (_, state) {
           Color buttonTextColour;

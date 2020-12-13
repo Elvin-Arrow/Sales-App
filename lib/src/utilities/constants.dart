@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum Sale {
   Year,
   Quarter,
@@ -13,3 +15,7 @@ enum QueryControls {
   Location,
   Item,
 }
+
+const kSidebarButtonTextStyle = TextStyle(
+  fontSize: 20.0,
+);

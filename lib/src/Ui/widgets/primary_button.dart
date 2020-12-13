@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sales_app/src/utilities/constants.dart';
 
 class PrimaryButton extends StatelessWidget {
   PrimaryButton({
@@ -33,8 +34,7 @@ class PrimaryButton extends StatelessWidget {
           padding: this.internalPadding ?? EdgeInsets.all(8.0),
           child: Text(
             this.text ?? '',
-            style: TextStyle(
-              fontSize: 16.0,
+            style: kSidebarButtonTextStyle.copyWith(
               color: this.textColour,
             ),
           ),

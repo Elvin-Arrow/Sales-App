@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sales_app/src/Ui/widgets/constraint_dropdown.dart';
 import 'package:sales_app/src/cubit/control_cubit.dart';
-import 'package:sales_app/src/cubit/page_cubit.dart';
 import 'package:sales_app/src/utilities/constants.dart';
 
 class Operations extends StatelessWidget {
@@ -32,11 +31,16 @@ class Operations extends StatelessWidget {
           ),
           BlocBuilder<ControlCubit, ControlState>(
             builder: (_, state) {
+              List<Widget> controls;
               if (state is TimeControl) {
               } else if (state is LocationControl) {
               } else if (state is ItemControl) {}
 
-              return Container();
+              return controls != null
+                  ? Row(
+                      children: controls,
+                    )
+                  : Container();
             },
           ),
         ],
@@ -52,4 +56,34 @@ class Operations extends StatelessWidget {
     else
       return QueryControls.Item;
   }
+
+  Widget _getControl() {
+    return ListTile(
+      leading: Text('Sort by: '),
+      title: ConstraintDropdown(
+        items: [],
+        onChanged: (val) {},
+      ),
+    );
+  }
+
+  List<String> _getTimeValues() {
+    return [
+      'Year',
+      'Month',
+      'Quarter',
+      'Day',
+    ];
+  }
+
+  List<String> _getLocationValues() {
+    return [
+      'Country',
+      'State / Province',
+      'City',
+      'Street',
+    ];
+  }
+
+  List<String> _getItemValues() {}
 }

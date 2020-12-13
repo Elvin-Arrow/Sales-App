@@ -36,7 +36,13 @@ class MaterialBarChart extends StatelessWidget {
         // TODO Replace the dummy chart with actual chart
         child: Column(
           children: [
-            Text(this.title),
+            Text(
+              this.title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
+              ),
+            ),
             SizedBox(
               height: 12.0,
             ),
