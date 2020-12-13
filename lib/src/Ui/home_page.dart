@@ -24,31 +24,34 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _getContent(BuildContext context) {
-    return Row(
-      children: [
-        // Side bar
-        Sidebar(
-          width: MediaQuery.of(context).size.width * 0.20,
-        ),
-
-        // Body
-        Expanded(
-          child: BlocBuilder<PageCubit, PageState>(
-            builder: (_, state) {
-              if (state is ShowDashboard) {
-                return Dashboard(
-                  yearlySales: state.yearlySales,
-                );
-              } else if (state is ShowOperations) {
-                return Operations();
-              }
-
-              context.read<PageCubit>().showDashboard();
-              return Expanded(child: LoadingPage());
-            },
+    return LayoutBuilder(
+      builder: (context, constraints) => Row(
+        children: [
+          // Side bar
+          Sidebar(
+            width: constraints.biggest.width * 0.20,
           ),
-        )
-      ],
+
+          // Body
+          Expanded(
+            child: BlocBuilder<PageCubit, PageState>(
+              builder: (_, state) {
+                if (state is ShowDashboard) {
+                  return Dashboard(
+                    yearlySales: state.yearlySales,
+                    constraints: constraints,
+                  );
+                } else if (state is ShowOperations) {
+                  return Operations();
+                }
+
+                context.read<PageCubit>().showDashboard();
+                return LoadingPage();
+              },
+            ),
+          )
+        ],
+      ),
     );
   }
 }

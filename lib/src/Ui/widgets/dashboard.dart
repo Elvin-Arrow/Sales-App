@@ -4,12 +4,14 @@ import 'package:sales_app/src/resources/models/yearl_sales.dart';
 
 class Dashboard extends StatelessWidget {
   final List<YearlySales> yearlySales;
+  final BoxConstraints constraints;
 
-  Dashboard({this.yearlySales});
+  Dashboard({this.yearlySales, this.constraints});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: constraints,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(12.0),
@@ -21,8 +23,15 @@ class Dashboard extends StatelessWidget {
         horizontal: 36.0,
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: _getRegionalSalesContent(context),
+        children: [
+          Expanded(
+            child: ListView(
+              children: _getRegionalSalesContent(context),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -44,7 +53,7 @@ class Dashboard extends StatelessWidget {
       // Bar charts
       _getBarCharts(context),
 
-      Spacer(),
+      // Spacer(),
     ];
   }
 
@@ -67,15 +76,12 @@ class Dashboard extends StatelessWidget {
         SizedBox(
           height: 24.0,
         ),
-        /*  Center(
-          child: LayoutBuilder(
-            builder: (_, constraints) => MaterialBarChart(
-              height: constraints.biggest.height * 0.45,
-              width: constraints.biggest.width * 0.85,
-              barColour: Colors.teal,
-            ),
+        Center(
+          child: MaterialBarChart(
+            height: 500.0,
+            barColour: Colors.teal,
           ),
-        ), */
+        ),
       ],
     );
   }
