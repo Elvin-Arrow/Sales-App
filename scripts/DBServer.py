@@ -2,8 +2,8 @@ import pyodbc
 from flask import Flask, jsonify
 
 conn = pyodbc.connect('Driver={SQL Server};'
-                      'Server=DESKTOP-RRKDPDK\SQLEXPRESS;'
-                      'Database=SaleManagement;'
+                      'Server=DESKTOP-P75CUH1\SQLEXPRESS;'
+                      'Database=Test;'
                       'Trusted_Connection=yes;')
 
 
@@ -103,7 +103,7 @@ def query2():
     cursor.execute(query)
 
     for row in cursor:
-        temp.append({"country": int(row.country), "city":String(row.city),"sales": row.sales})
+        temp.append({"country": int(row.country), "city": str(row.city),"sales": row.sales})
 
     response = jsonify(temp)
 
@@ -122,7 +122,7 @@ def query3():
     cursor.execute(query)
 
     for row in cursor:
-        temp.append({"brand": int(row.brand),"type"String(row.itemType) ,"sales": row.sales})
+        temp.append({"brand": int(row.brand),"type": str(row.itemType) ,"sales": row.sales})
 
     response = jsonify(temp)
 
@@ -141,7 +141,7 @@ def query4():
     cursor.execute(query)
 
     for row in cursor:
-        temp.append({"month": int(row.month),"day" : String(row.day), "sales": row.sales})
+        temp.append({"month": int(row.month),"day" : row.day, "sales": row.sales})
 
     response = jsonify(temp)
 
@@ -160,7 +160,7 @@ def query5():
     cursor.execute(query)
 
     for row in cursor:
-        temp.append({"itemName": String(row.itemName), "quantity":int(row.quantity) ,"sales": row.sales})
+        temp.append({"itemName": row.itemName, "quantity":int(row.quantity) ,"sales": row.sales})
 
     response = jsonify(temp)
 
@@ -179,7 +179,7 @@ def query6():
     cursor.execute(query)
 
     for row in cursor:
-        temp.append({"street": String(row.street), "sales": row.sales})
+        temp.append({"street": row.street, "sales": row.sales})
 
     response = jsonify(temp)
 

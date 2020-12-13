@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sales_app/src/Ui/widgets/material_bar_chart.dart';
 import 'package:sales_app/src/resources/models/yearl_sales.dart';
+import 'package:sales_app/src/utilities/constants.dart';
 
 class Dashboard extends StatelessWidget {
   final List<YearlySales> yearlySales;
@@ -67,6 +68,8 @@ class Dashboard extends StatelessWidget {
           height: heightConstraint * 2 + 24,
           width: MediaQuery.of(context).size.width * 0.4,
           barColour: Colors.teal,
+          data: yearlySales,
+          salesType: Sale.Default,
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -74,7 +77,9 @@ class Dashboard extends StatelessWidget {
             MaterialBarChart(
               title: 'Regional Sales',
               height: heightConstraint,
-              barColour: Colors.greenAccent,
+              barColour: Colors.blue,
+              data: yearlySales,
+              salesType: Sale.Default,
             ),
             SizedBox(
               height: 24.0,
@@ -82,7 +87,9 @@ class Dashboard extends StatelessWidget {
             MaterialBarChart(
               title: 'Brand Sales',
               height: heightConstraint,
-              barColour: Colors.redAccent,
+              barColour: Colors.red,
+              data: yearlySales,
+              salesType: Sale.Default,
             ),
           ],
         ),

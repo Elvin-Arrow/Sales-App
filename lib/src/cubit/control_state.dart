@@ -22,3 +22,15 @@ class ItemControl extends ControlState {
 
   ItemControl(this.controlParameter);
 }
+
+class ControlLoading extends ControlState {
+  final Sale saleType;
+  final List data;
+
+  ControlLoading(
+    this.saleType,
+    this.data,
+  );
+}
+
+class ControlLoaded extends ControlState {}

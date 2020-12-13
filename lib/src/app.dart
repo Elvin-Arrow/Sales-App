@@ -13,7 +13,7 @@ class App extends StatelessWidget {
         BlocProvider(
           create: (_) => PageCubit(SalesRepository()),
         ),
-        BlocProvider(create: (_) => ControlCubit()),
+        BlocProvider(create: (_) => ControlCubit(SalesRepository())),
       ], child: HomePage()),
     );
   }

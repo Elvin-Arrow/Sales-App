@@ -1,14 +1,20 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+
+import 'package:sales_app/src/resources/sales_repository.dart';
 import 'package:sales_app/src/utilities/constants.dart';
 
 part 'control_state.dart';
 
 class ControlCubit extends Cubit<ControlState> {
-  ControlCubit() : super(ControlInitial());
+  final SalesRepository _salesRepository;
+
+  ControlCubit(
+    this._salesRepository,
+  ) : super(ControlInitial());
 
   String controlParameter;
-  String dimensionParameter;
+  Sale dimensionParameter;
 
   void showControls(QueryControls controls) {
     switch (controls) {
@@ -28,6 +34,17 @@ class ControlCubit extends Cubit<ControlState> {
         break;
       default:
     }
+  }
+
+  void setDimensionParameter(Sale saleType) {
+    dimensionParameter = saleType;
+    emit(
+      ControlLoading(
+        saleType,
+        _salesRepository.getData(saleType),
+      ),
+    );
+    // emit(ControlLoaded());
   }
 
   void _showTimeControls() {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sales_app/src/Ui/widgets/constraint_dropdown.dart';
+import 'package:sales_app/src/Ui/widgets/material_bar_chart.dart';
 import 'package:sales_app/src/cubit/control_cubit.dart';
 import 'package:sales_app/src/utilities/constants.dart';
 
@@ -29,6 +30,9 @@ class Operations extends StatelessWidget {
               ),
             ],
           ),
+          SizedBox(
+            height: 24.0,
+          ),
           BlocBuilder<ControlCubit, ControlState>(
             builder: (_, state) {
               if (state is TimeControl) {
@@ -44,6 +48,18 @@ class Operations extends StatelessWidget {
               return Container();
             },
           ),
+
+          // Show Chart
+          BlocBuilder<ControlCubit, ControlState>(
+            builder: (context, state) {
+              if (state is ControlLoading) {
+                return MaterialBarChart(
+                    salesType: state.saleType, data: state.data);
+              }
+              return Container();
+            },
+          )
+          // Show Table
         ],
       ),
     );
